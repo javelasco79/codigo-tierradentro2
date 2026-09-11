@@ -1,0 +1,309 @@
+/* =========================================================================
+   componentes.css
+   Estilos de cada pieza visible: cabecera, tarjetas, fichas de eco, botones.
+   El diseño es adaptable: una sola columna en celular y varias en pantallas
+   grandes, sin necesidad de una versión aparte para cada dispositivo.
+   ========================================================================= */
+
+/* ----- Cabecera ------------------------------------------------------- */
+.cabecera {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-claro) 100%);
+  color: #FFF;
+  padding: 20px 0;
+  box-shadow: var(--sombra);
+}
+
+.cabecera__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cabecera__titulo { font-size: clamp(1.15rem, 3.4vw, 1.6rem); }
+
+.cabecera__sub {
+  font-size: 0.82rem;
+  color: #A9BBD4;
+  letter-spacing: 0.03em;
+}
+
+/* Identificador del descifrador: nunca guarda nombres, solo códigos */
+.cabecera__codigo {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ----- Navegación por niveles ---------------------------------------- */
+.navegacion {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;       /* en celular se desliza en lugar de apretarse */
+  padding: 14px 16px;
+  scrollbar-width: none;
+}
+.navegacion::-webkit-scrollbar { display: none; }
+
+.navegacion__boton {
+  white-space: nowrap;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--superficie);
+  border: 1.5px solid var(--borde);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  transition: var(--transicion);
+}
+
+.navegacion__boton:hover { border-color: var(--teal); }
+
+.navegacion__boton.activo {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #FFF;
+}
+
+/* ----- Tarjetas genéricas -------------------------------------------- */
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 18px;
+  box-shadow: var(--sombra);
+  margin-bottom: 16px;
+}
+
+.tarjeta__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Franja de color que identifica el nivel de la tablilla */
+.etiqueta-nivel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #FFF;
+}
+.etiqueta-nivel.nivel-1 { background: var(--mora); }
+.etiqueta-nivel.nivel-2 { background: var(--teal); }
+.etiqueta-nivel.nivel-3 { background: var(--coral); }
+
+/* ----- Rejilla de tablillas ------------------------------------------ */
+.rejilla {
+  display: grid;
+  gap: 14px;
+  /* Cada tarjeta ocupa al menos 240px; el navegador decide cuántas caben */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.tablilla-card {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px;
+  text-align: left;
+  width: 100%;
+  transition: var(--transicion);
+  box-shadow: var(--sombra);
+}
+
+.tablilla-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-alta);
+  border-color: var(--teal);
+}
+
+.tablilla-card__expresion {
+  font-size: 1.25rem;
+  margin: 10px 0 6px;
+  color: var(--navy);
+  min-height: 2.2rem;
+}
+
+.tablilla-card__estado {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+/* ----- Ficha de eco --------------------------------------------------- */
+.ficha { margin-top: 14px; }
+
+.ficha__fila {
+  display: grid;
+  grid-template-columns: 42px 1fr 120px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-chico);
+  margin-bottom: 8px;
+  background: var(--superficie);
+  transition: var(--transicion);
+}
+
+/* En celular la marca baja a una segunda línea para no comprimir el paso */
+@media (max-width: 520px) {
+  .ficha__fila { grid-template-columns: 36px 1fr; }
+  .ficha__marca { grid-column: 1 / -1; justify-self: start; }
+}
+
+.ficha__numero {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #FFF;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.ficha__paso {
+  font-size: 1.05rem;
+  color: var(--navy);
+  overflow-x: auto;   /* fórmulas largas se deslizan en lugar de romperse */
+}
+
+/* Filas que quedan sin evaluar tras el primer gris */
+.ficha__fila.sin-leer { background: #F4F6F9; border-style: dashed; }
+.ficha__fila.sin-leer .ficha__numero { background: #C8D1DD; }
+.ficha__fila.sin-leer .ficha__paso { color: #A8B2C0; }
+
+/* ----- Marcas del eco ------------------------------------------------- */
+/* El símbolo acompaña siempre al color: así funciona impreso en blanco y
+   negro y para quien no distingue verde de gris. */
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #FFF;
+}
+.marca--verde    { background: var(--verde); }
+.marca--amarillo { background: var(--amarillo); color: #4A3600; }
+.marca--gris     { background: var(--gris-eco); }
+.marca--vacia    { background: #E5EAF1; color: var(--texto-suave); }
+
+.marca__simbolo { font-size: 1rem; line-height: 1; }
+
+/* ----- Botones -------------------------------------------------------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: var(--radio-chico);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transicion);
+  /* Área mínima cómoda para tocar con el dedo */
+  min-height: 44px;
+}
+
+.boton--primario { background: var(--navy); color: #FFF; }
+.boton--primario:hover { background: var(--navy-claro); }
+
+.boton--secundario {
+  background: var(--superficie);
+  border: 1.5px solid var(--borde);
+  color: var(--texto);
+}
+.boton--secundario:hover { border-color: var(--navy); }
+
+.boton--verde { background: var(--verde); color: #FFF; }
+.boton--amarillo { background: var(--amarillo); color: #4A3600; }
+.boton--gris { background: var(--gris-eco); color: #FFF; }
+
+.boton:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.botonera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* ----- Avisos y explicaciones ---------------------------------------- */
+.aviso {
+  border-left: 5px solid var(--teal);
+  background: #EAF4F4;
+  border-radius: var(--radio-chico);
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 0.92rem;
+}
+.aviso--alerta { border-left-color: var(--coral); background: #FDF0EB; }
+.aviso--logro  { border-left-color: var(--verde); background: #E9F7F1; }
+
+/* ----- Contador de ecos ---------------------------------------------- */
+.ecos {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.ecos__punto {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--navy);
+}
+.ecos__punto.usado { background: #D6DDE7; }
+
+/* ----- Mural de progreso --------------------------------------------- */
+.mural {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.sello {
+  border: 2px dashed var(--borde);
+  border-radius: var(--radio);
+  padding: 16px 12px;
+  text-align: center;
+  background: var(--superficie);
+}
+
+.sello.logrado {
+  border-style: solid;
+  border-color: var(--verde);
+  background: #E9F7F1;
+}
+
+.sello__icono { font-size: 1.7rem; }
+
+.sello__nombre {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.sello__detalle { font-size: 0.78rem; color: var(--texto-suave); }
+
+/* ----- Pie ------------------------------------------------------------ */
+.pie {
+  text-align: center;
+  padding: 26px 16px 40px;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}

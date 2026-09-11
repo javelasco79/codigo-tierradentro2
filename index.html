@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <!-- Hace que la app se adapte a celulares, tablets y tablero digital -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Código Tierradentro: el Hipogeo 9. Experiencia gamificada de álgebra para grado noveno.">
+  <title>Código Tierradentro · el Hipogeo 9</title>
+
+  <!-- KaTeX presenta las fórmulas matemáticas. Si no carga, la app muestra
+       la versión en texto plano de cada expresión. -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+        crossorigin="anonymous">
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <!-- ===== Cabecera ================================================== -->
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <div>
+        <h1 class="cabecera__titulo">Código Tierradentro</h1>
+        <p class="cabecera__sub">ARCHIVO DE SIGNOS · EL HIPOGEO 9</p>
+      </div>
+      <span class="cabecera__codigo oculto" id="barra-superior">
+        Descifrador <strong id="codigo-visible"></strong>
+      </span>
+    </div>
+  </header>
+
+  <!-- ===== Menú principal =========================================== -->
+  <div class="contenedor">
+    <nav class="navegacion no-imprimir">
+      <button class="navegacion__boton" id="ir-tablillas">Tablillas</button>
+      <button class="navegacion__boton" id="ir-verificador">Verificador</button>
+      <button class="navegacion__boton" id="ir-mural">Mural</button>
+      <button class="navegacion__boton" id="ir-ajustes">Ajustes</button>
+    </nav>
+  </div>
+
+  <main class="contenedor">
+
+    <!-- ===== INICIO ================================================== -->
+    <section class="pantalla" id="pantalla-inicio">
+      <div class="tarjeta">
+        <h2>Acreditación del descifrador</h2>
+        <p class="texto-suave" style="margin:10px 0 16px;">
+          El Archivo no registra nombres. Escribí el código que te asignó el
+          docente, por ejemplo D01, y quedará asociado a tu bitácora de papel.
+        </p>
+
+        <label class="solo-lectores" for="campo-codigo">Código de descifrador</label>
+        <input id="campo-codigo" type="text" placeholder="D01" maxlength="6"
+               style="width:100%;max-width:220px;padding:12px;border-radius:8px;
+                      border:1.5px solid var(--borde);font-size:1.1rem;
+                      text-transform:uppercase;">
+
+        <div class="botonera">
+          <button class="boton boton--primario" id="boton-entrar">
+            Entrar al Archivo
+          </button>
+        </div>
+
+        <div class="aviso aviso--alerta oculto" id="aviso-inicio">
+          Escribí tu código antes de continuar.
+        </div>
+      </div>
+
+      <div class="tarjeta">
+        <h3>Cómo funciona el eco</h3>
+        <p style="margin:10px 0;">
+          Cada tablilla llega con una transcripción adulterada: alguien escondió
+          un error en algún paso del procedimiento. Tu trabajo es encontrarlo.
+        </p>
+        <div class="ficha">
+          <div class="ficha__fila">
+            <span class="ficha__numero">●</span>
+            <span class="ficha__paso">El paso es válido y está en su lugar</span>
+            <span class="ficha__marca"><span class="marca marca--verde">
+              <span class="marca__simbolo">●</span> Verde</span></span>
+          </div>
+          <div class="ficha__fila">
+            <span class="ficha__numero">◐</span>
+            <span class="ficha__paso">Conserva la igualdad, pero está incompleto</span>
+            <span class="ficha__marca"><span class="marca marca--amarillo">
+              <span class="marca__simbolo">◐</span> Amarillo</span></span>
+          </div>
+          <div class="ficha__fila">
+            <span class="ficha__numero">○</span>
+            <span class="ficha__paso">Aquí se rompió la equivalencia</span>
+            <span class="ficha__marca"><span class="marca marca--gris">
+              <span class="marca__simbolo">○</span> Gris</span></span>
+          </div>
+        </div>
+        <div class="aviso aviso--alerta">
+          El Archivo nunca entrega la respuesta. Tenés tres ecos por tablilla.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TABLILLAS =============================================== -->
+    <section class="pantalla oculto" id="pantalla-tablillas">
+      <h2>Tablillas del Archivo</h2>
+      <p class="texto-suave" id="descripcion-nivel" style="margin:8px 0 14px;"></p>
+
+      <div class="navegacion" id="navegacion" style="padding-left:0;"></div>
+
+      <div class="rejilla" id="rejilla-tablillas"></div>
+    </section>
+
+    <!-- ===== PERITAJE ================================================ -->
+    <section class="pantalla oculto" id="pantalla-peritaje">
+      <div class="tarjeta">
+        <div class="tarjeta__titulo">
+          <h2 id="titulo-peritaje"></h2>
+        </div>
+
+        <p class="texto-suave">Enunciado original</p>
+        <div class="tablilla-card__expresion" id="enunciado-peritaje"></div>
+
+        <div class="aviso">
+          Esta transcripción llegó adulterada. Señalá el paso donde creés que
+          se rompió la equivalencia. Cada intento consume un eco.
+        </div>
+
+        <div class="ecos" id="contador-ecos" style="margin-top:14px;"></div>
+
+        <div class="ficha" id="filas-peritaje"></div>
+
+        <div id="resultado-peritaje"></div>
+
+        <div class="botonera oculto" id="acciones-peritaje">
+          <button class="boton boton--primario" id="boton-acreditar">
+            Registrar en mi bitácora
+          </button>
+        </div>
+
+        <div class="botonera">
+          <button class="boton boton--secundario" id="boton-volver">
+            Volver a las tablillas
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VERIFICADOR ============================================= -->
+    <section class="pantalla oculto" id="pantalla-verificador">
+      <div class="tarjeta">
+        <h2>Clave de contraste</h2>
+        <div class="aviso aviso--alerta">
+          Esta pantalla es solo para el Verificador, y únicamente para tablillas
+          de <strong>otra brigada</strong>. Nadie verifica la suya propia.
+        </div>
+
+        <label class="solo-lectores" for="selector-clave">Elegir tablilla</label>
+        <select id="selector-clave"
+                style="width:100%;padding:12px;border-radius:8px;
+                       border:1.5px solid var(--borde);margin-top:14px;"></select>
+      </div>
+
+      <div id="contenido-clave"></div>
+    </section>
+
+    <!-- ===== MURAL =================================================== -->
+    <section class="pantalla oculto" id="pantalla-mural">
+      <h2>Mural del Hipogeo 9</h2>
+      <p class="texto-suave" style="margin:8px 0 16px;">
+        Los cuatro sellos de dominio. El mural de papel del salón sigue siendo
+        el registro oficial: esta pantalla solo lo acompaña.
+      </p>
+
+      <div class="mural" id="mural"></div>
+      <div id="resumen-mural" style="margin-top:16px;"></div>
+    </section>
+
+    <!-- ===== AJUSTES ================================================= -->
+    <section class="pantalla oculto" id="pantalla-ajustes">
+      <div class="tarjeta">
+        <h2>Conexión con la hoja de cálculo</h2>
+        <p class="texto-suave" style="margin:10px 0 14px;">
+          Sin configurar nada, la app guarda el avance en este mismo navegador.
+          Si pegás la URL de tu Apps Script, el avance también se enviará a la
+          hoja de Google, y así el estudiante lo encuentra desde cualquier
+          computador de la sala.
+        </p>
+
+        <label class="solo-lectores" for="campo-hoja">URL del Apps Script</label>
+        <input id="campo-hoja" type="url" placeholder="https://script.google.com/macros/s/…/exec"
+               style="width:100%;padding:12px;border-radius:8px;
+                      border:1.5px solid var(--borde);">
+
+        <div class="botonera">
+          <button class="boton boton--primario" id="boton-guardar-hoja">
+            Guardar
+          </button>
+        </div>
+
+        <div class="aviso aviso--logro oculto" id="aviso-ajustes">
+          Configuración guardada.
+        </div>
+
+        <div class="aviso">
+          <strong>Privacidad:</strong> la app guarda códigos, nunca nombres.
+          La equivalencia entre código y estudiante queda en el registro de papel
+          del docente.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    Código Tierradentro: el Hipogeo 9 · IE Empresarial San José, Inzá (Cauca)
+  </footer>
+
+  <!-- type="module" permite separar el código en varios archivos -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
